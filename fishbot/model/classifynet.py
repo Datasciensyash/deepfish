@@ -6,7 +6,7 @@ import numpy as np
 import timm
 import torch
 
-from fishbot.abstract import VisionModel
+from fishbot.model.abstract import VisionModel
 
 
 class ClassificationNet(VisionModel):
@@ -33,7 +33,9 @@ class ClassificationNet(VisionModel):
         self._encoder_name = encoder_name
 
         self._size = size
-        self._model = timm.create_model(encoder_name, pretrained=use_pretrained, num_classes=1)
+        self._model = timm.create_model(
+            encoder_name, pretrained=use_pretrained, num_classes=1
+        )
 
     def forward(self, input_image: torch.Tensor) -> torch.Tensor:
         return self._model(input_image)
@@ -62,6 +64,8 @@ class ClassificationNet(VisionModel):
 
         # Get predictions
         with torch.no_grad():
-            predicted = torch.sigmoid(self.forward(input_image)[0]).numpy().flatten()[0]
+            predicted = (
+                torch.sigmoid(self.forward(input_image)[0]).numpy().flatten()[0]
+            )
 
         return predicted

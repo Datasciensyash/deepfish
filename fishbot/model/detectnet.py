@@ -1,13 +1,14 @@
 import pickle
 import typing as tp
 from pathlib import Path
+
 import albumentations as A
 import numpy as np
 import segmentation_models_pytorch as smp
 import torch
 from scipy import ndimage
 
-from fishbot.abstract import VisionModel
+from fishbot.model.abstract import VisionModel
 
 
 class BobberDetector(VisionModel):
@@ -15,7 +16,7 @@ class BobberDetector(VisionModel):
         self,
         encoder_name: str = "resnet18",
         size: tp.Tuple[int, int] = (224, 320),
-        mask: tp.Optional[Path] = None
+        mask: tp.Optional[Path] = None,
     ) -> None:
         super(BobberDetector, self).__init__()
 
@@ -24,9 +25,9 @@ class BobberDetector(VisionModel):
         self._mask = None
 
         if mask is not None:
-            with mask.open('rb') as file:
+            with mask.open("rb") as file:
                 self._mask = pickle.load(file)
-                self._mask = A.Resize(*size)(image=self._mask)['image']
+                self._mask = A.Resize(*size)(image=self._mask)["image"]
 
         self._size = size
         self._model = smp.Unet(
@@ -49,9 +50,13 @@ class BobberDetector(VisionModel):
         }
 
     @classmethod
-    def from_checkpoint(cls, checkpoint_path: Path, mask: tp.Optional[Path] = None):
+    def from_checkpoint(
+        cls, checkpoint_path: Path, mask: tp.Optional[Path] = None
+    ):
         state_dict = torch.load(checkpoint_path)
-        detector = cls(state_dict["encoder_name"], state_dict["size"], mask=mask)
+        detector = cls(
+            state_dict["encoder_name"], state_dict["size"], mask=mask
+        )
         detector.load_state_dict(state_dict["state_dict"])
         return detector
 
@@ -68,7 +73,12 @@ class BobberDetector(VisionModel):
 
         # Get mask
         with torch.no_grad():
-            output_mask = torch.sigmoid(self.forward(input_image)).squeeze(0).cpu().numpy()[0]
+            output_mask = (
+                torch.sigmoid(self.forward(input_image))
+                .squeeze(0)
+                .cpu()
+                .numpy()[0]
+            )
 
         # Modify mask if mask in inputs
         if self._mask is not None:
@@ -84,7 +94,9 @@ class BobberDetector(VisionModel):
         # post-process mask and get coordinates
         output_mask, nr_objects = ndimage.label(output_mask)
 
-        output_mask = output_mask == np.argmax(np.bincount(output_mask.flatten())[1:]) + 1
+        output_mask = (
+            output_mask == np.argmax(np.bincount(output_mask.flatten())[1:]) + 1
+        )
         xs, ys = np.nonzero(output_mask)
         coordinates = (
             int(np.mean(ys) / self._size[1] * sizey),
