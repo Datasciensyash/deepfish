@@ -1,9 +1,10 @@
+import logging
 import time
 from pathlib import Path
 
 from fishbot.constants import (LOOT_OFFSET_PIXELS, LOOTING_GAP_TIME,
                                MAX_BOBBER_LIFETIME_SEC, MAX_LOOT_ITEMS,
-                               SLEEP_NOT_ACTIVE_SECONDS)
+                               SLEEP_NOT_ACTIVE_SECONDS, MAX_START_WAIT_TIME)
 from fishbot.controllers.input import InputController
 from fishbot.controllers.output import OutputController
 from fishbot.controllers.window import WindowController
@@ -41,9 +42,27 @@ class FishingBot:
     def _template_directory(self) -> Path:
         return Path(__file__).parent / "templates"
 
+    def _wait_and_prepare_start(self) -> None:
+
+        # Wait until World of Warcraft is opened
+        start_time = time.time()
+        while True:
+            if time.time() - start_time > MAX_START_WAIT_TIME:
+                raise RuntimeError("Max World of Warcraft opening time exceeded. Please restart.")
+
+            if self._window_controller.is_warcraft_active():
+                break
+
+        # Change third-person to first-person
+        self._input_controller.tap_key("F3")
+
     def run(self) -> None:
         is_fishing = False
 
+        # Starting preparation
+        self._wait_and_prepare_start()
+
+        # Main event loop
         while True:
 
             # Check active window. Don't do anything, if warcraft window
