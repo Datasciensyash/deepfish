@@ -54,7 +54,10 @@ class FishingBot:
                 break
 
         # Change third-person to first-person
-        self._input_controller.tap_key("F3")
+        self._input_controller.tap_end_key()
+        for _ in range(5):
+            self._input_controller.tap_home_key()
+            time.sleep(0.1)
 
     def run(self) -> None:
         is_fishing = False

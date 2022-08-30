@@ -38,6 +38,23 @@ class InputController:
         thread.start()
         self._mouse_controller.press(x, y, 2 if right_click else 1)
 
+    def tap_end_key(self) -> None:
+        self.tap_key(self._keyboard_controller.end_key)
+
+    def tap_home_key(self) -> None:
+        self.tap_key(self._keyboard_controller.home_key)
+
+    def tap_function_key(self, num: int) -> None:
+        """
+        Preform function key tap.
+
+        Args:
+            num: Number of button, e.g. 0.
+
+        Returns: None
+        """
+        self._keyboard_controller.tap_key(self._keyboard_controller.function_keys[num])
+
     def tap_key(self, button: str) -> None:
         """
         Preform key tap.
@@ -47,4 +64,4 @@ class InputController:
 
         Returns: None
         """
-        self._keyboard_controller.tap_key(character=button)
+        self._keyboard_controller.tap_key(button)
