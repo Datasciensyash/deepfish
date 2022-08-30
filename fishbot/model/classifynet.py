@@ -33,9 +33,13 @@ class ClassificationNet(VisionModel):
         self._encoder_name = encoder_name
 
         self._size = size
-        self._model = timm.create_model(
-            encoder_name, pretrained=use_pretrained, num_classes=1
-        )
+        self._model = timm.create_model(encoder_name, pretrained=use_pretrained, num_classes=1)
+        self._batch_buffer = None
+        self._batch_buffer_index = 0
+
+    def _init_batch_buffer(self, size: int) -> None:
+        self._batch_buffer = torch.zeros((size, 3, *self._size))
+        self._batch_buffer_index = 0
 
     def forward(self, input_image: torch.Tensor) -> torch.Tensor:
         return self._model(input_image)
@@ -56,16 +60,34 @@ class ClassificationNet(VisionModel):
         detector.load_state_dict(state_dict["state_dict"])
         return detector
 
-    def _inference(self, input_image: np.array, **kwargs) -> float:
-        # Preprocess image
+    def preprocess_image(self, input_image: np.ndarray) -> torch.Tensor:
         input_image = self.preprocess(image=input_image)["image"]
         input_image = torch.Tensor(input_image).unsqueeze(0)
         input_image = input_image.permute(0, 3, 1, 2)
+        return input_image
+
+    def _inference(self, input_image: np.array, **kwargs) -> float:
+        # Preprocess image
+        input_image = self.preprocess_image(input_image)
 
         # Get predictions
         with torch.no_grad():
-            predicted = (
-                torch.sigmoid(self.forward(input_image)[0]).numpy().flatten()[0]
-            )
+            predicted = torch.sigmoid(self.forward(input_image)[0]).numpy().flatten()[0]
 
         return predicted
+
+    def batch_inference(self, input_image: np.ndarray, batch_size: int = 4) -> tp.Optional[float]:
+        if self._batch_buffer is None or self._batch_buffer.shape[0] < batch_size:
+            self._init_batch_buffer(batch_size)
+
+        input_image = self.preprocess_image(input_image)
+        self._batch_buffer[self._batch_buffer_index] = input_image
+        self._batch_buffer_index += 1
+
+        max_probability = None
+        if self._batch_buffer_index >= batch_size:
+            model_inputs = self._batch_buffer[:batch_size]
+            max_probability = torch.max(torch.sigmoid(self.forward(model_inputs))).item()
+            self._batch_buffer_index = 0
+
+        return max_probability

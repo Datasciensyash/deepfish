@@ -36,7 +36,7 @@ class InputController:
         click_function = gui.rightClick if right_click else gui.click
         thread = Thread(target=click_function, args=[x, y], daemon=True)
         thread.start()
-        self._mouse_controller.click(x, y, 2 if right_click else 1)
+        self._mouse_controller.press(x, y, 2 if right_click else 1)
 
     def tap_key(self, button: str) -> None:
         """

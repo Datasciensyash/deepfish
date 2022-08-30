@@ -1,0 +1,46 @@
+import argparse
+from pathlib import Path
+
+from fishbot.bot import FishingBot
+
+
+def parse_args() -> argparse.Namespace:
+    arguments_parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    arguments_parser.add_argument(
+        "-k",
+        "--fishing_skill_key",
+        help="Key, assigned to fishing skill",
+        type=str,
+        required=True,
+    )
+    arguments_parser.add_argument(
+        "-bc",
+        "--bobber_checkpoint",
+        help="Path of checkpoint of Bobber Detector",
+        type=Path,
+        required=True,
+    )
+    arguments_parser.add_argument(
+        "-sc",
+        "--splash_checkpoint",
+        help="Path of checkpoint of Splash Detector",
+        type=Path,
+        required=True,
+    )
+    args = arguments_parser.parse_args()
+    return args
+
+
+def main():
+    args = parse_args()
+    bot_instance = FishingBot(**vars(args))
+    bot_instance.run()
+
+
+if __name__ == "__main__":
+    import time
+
+    time.sleep(2)
+    main()
