@@ -1,10 +1,9 @@
-import logging
 import time
 from pathlib import Path
 
 from fishbot.constants import (LOOT_OFFSET_PIXELS, LOOTING_GAP_TIME,
                                MAX_BOBBER_LIFETIME_SEC, MAX_LOOT_ITEMS,
-                               SLEEP_NOT_ACTIVE_SECONDS, MAX_START_WAIT_TIME)
+                               SLEEP_NOT_ACTIVE_SECONDS, MAX_START_WAIT_TIME, FISHING_WAIT_TIME)
 from fishbot.controllers.input import InputController
 from fishbot.controllers.output import OutputController
 from fishbot.controllers.window import WindowController
@@ -77,6 +76,9 @@ class FishingBot:
 
             # Try to start fishing
             if not is_fishing:
+                # Sleep for some time
+                time.sleep(FISHING_WAIT_TIME)
+
                 # Move the cursor away from bobber
                 self._input_controller.move(0, 0)
 
@@ -112,11 +114,12 @@ class FishingBot:
 
             # If splash detected, than click on bobber and loot
             if splash_probability > self._splash_threshold:
-                # Move mouse to current position of bobber
-                self._input_controller.move(*bobber_position)
 
                 # Right-click on bobber
                 self._input_controller.click(*bobber_position, right_click=True)
+
+                # Wait for some time for loot to show up
+                time.sleep(0.5)
 
                 # Make screenshot to find looting skull icon
                 screenshot = self._screen_controller.get_screenshot()
@@ -140,6 +143,8 @@ class FishingBot:
 
                     # Loot item
                     self._input_controller.click(loot_x, loot_y, right_click=True)
+
+                is_fishing = False
 
             # If time of fishing is exceeded
             elif time.time() - fishing_start_time > MAX_BOBBER_LIFETIME_SEC:
