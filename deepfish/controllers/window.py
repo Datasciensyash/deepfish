@@ -1,6 +1,6 @@
 from win32gui import GetForegroundWindow, GetWindowText
 
-from fishbot.constants import WORLD_OF_WARCRAFT_NAME
+from deepfish.constants import WORLD_OF_WARCRAFT_NAME
 
 
 class WindowController:

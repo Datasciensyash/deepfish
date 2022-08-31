@@ -20,7 +20,7 @@ def _load_requirements(path_dir: Path, comment_char: str = "#"):
 
 
 setup(
-    name="fishbot",
+    name="deepfish",
     version="0.0.1",
     packages=find_packages(),
     install_requires=_load_requirements(THIS_DIR),

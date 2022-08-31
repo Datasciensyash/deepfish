@@ -1,17 +1,17 @@
 import time
 from pathlib import Path
 
-from fishbot.constants import (FISHING_WAIT_TIME, LOOT_OFFSET_PIXELS,
-                               LOOTING_GAP_TIME, MAX_BOBBER_LIFETIME_SEC,
-                               MAX_LOOT_ITEMS, MAX_START_WAIT_TIME,
-                               SLEEP_NOT_ACTIVE_SECONDS)
-from fishbot.controllers.input import InputController
-from fishbot.controllers.output import OutputController
-from fishbot.controllers.window import WindowController
-from fishbot.match import TemplateMatchingModel
-from fishbot.model.classifynet import ClassificationNet
-from fishbot.model.detectnet import BobberDetector
-from fishbot.utils.detection_mask import create_detection_mask
+from deepfish.constants import (FISHING_WAIT_TIME, LOOT_OFFSET_PIXELS,
+                                LOOTING_GAP_TIME, MAX_BOBBER_LIFETIME_SEC,
+                                MAX_LOOT_ITEMS, MAX_START_WAIT_TIME,
+                                SLEEP_NOT_ACTIVE_SECONDS)
+from deepfish.controllers.input import InputController
+from deepfish.controllers.output import OutputController
+from deepfish.controllers.window import WindowController
+from deepfish.match import TemplateMatchingModel
+from deepfish.model.classifynet import ClassificationNet
+from deepfish.model.detectnet import BobberDetector
+from deepfish.utils.detection_mask import create_detection_mask
 
 
 class FishingBot:

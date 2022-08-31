@@ -8,7 +8,7 @@ import segmentation_models_pytorch as smp
 import torch
 from scipy import ndimage
 
-from fishbot.model.abstract import VisionModel
+from deepfish.model.abstract import VisionModel
 
 
 class BobberDetector(VisionModel):

@@ -6,7 +6,7 @@ import numpy as np
 import timm
 import torch
 
-from fishbot.model.abstract import VisionModel
+from deepfish.model.abstract import VisionModel
 
 
 class ClassificationNet(VisionModel):

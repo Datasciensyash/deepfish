@@ -1,7 +1,7 @@
 import argparse
 from pathlib import Path
 
-from fishbot.bot import FishingBot
+from deepfish.bot import FishingBot
 
 
 def parse_args() -> argparse.Namespace:
