@@ -1,14 +1,13 @@
-from threading import Thread
-
-import pyautogui as gui
-from pykeyboard import PyKeyboard
-from pymouse import PyMouse
+from pynput.mouse import Controller as MouseController
+from pynput.mouse import Button as MouseButtons
+from pynput.keyboard import Controller as KeyboardController
+from pynput.keyboard import Key as KeyboardKeys
 
 
 class InputController:
     def __init__(self):
-        self._mouse_controller = PyMouse()
-        self._keyboard_controller = PyKeyboard()
+        self._mouse_controller = MouseController()
+        self._keyboard_controller = KeyboardController()
 
     def move(self, x: int, y: int) -> None:
         """
@@ -20,7 +19,7 @@ class InputController:
 
         Returns: None.
         """
-        self._mouse_controller.move(x, y)
+        self._mouse_controller.position = (x, y)
 
     def click(self, x: int, y: int, right_click: bool = False) -> None:
         """
@@ -33,16 +32,14 @@ class InputController:
 
         Returns: None
         """
-        click_function = gui.rightClick if right_click else gui.click
-        thread = Thread(target=click_function, args=[x, y], daemon=True)
-        thread.start()
-        self._mouse_controller.press(x, y, 2 if right_click else 1)
+        self.move(x, y)
+        self._mouse_controller.click(MouseButtons.left if not right_click else MouseButtons.right)
 
     def tap_end_key(self) -> None:
-        self.tap_key(self._keyboard_controller.end_key)
+        self.tap_key(KeyboardKeys.end)
 
     def tap_home_key(self) -> None:
-        self.tap_key(self._keyboard_controller.home_key)
+        self.tap_key(KeyboardKeys.home)
 
     def tap_function_key(self, num: int) -> None:
         """
@@ -53,7 +50,8 @@ class InputController:
 
         Returns: None
         """
-        self._keyboard_controller.tap_key(self._keyboard_controller.function_keys[num])
+        function_key = getattr(KeyboardKeys, f'f{num}')
+        self._keyboard_controller.tap_key(function_key)
 
     def tap_key(self, button: str) -> None:
         """
@@ -64,4 +62,4 @@ class InputController:
 
         Returns: None
         """
-        self._keyboard_controller.tap_key(button)
+        self._keyboard_controller.tap(button)
