@@ -75,19 +75,3 @@ class ClassificationNet(VisionModel):
             predicted = torch.sigmoid(self.forward(input_image)[0]).numpy().flatten()[0]
 
         return predicted
-
-    def batch_inference(self, input_image: np.ndarray, batch_size: int = 4) -> tp.Optional[float]:
-        if self._batch_buffer is None or self._batch_buffer.shape[0] < batch_size:
-            self._init_batch_buffer(batch_size)
-
-        input_image = self.preprocess_image(input_image)
-        self._batch_buffer[self._batch_buffer_index] = input_image
-        self._batch_buffer_index += 1
-
-        max_probability = None
-        if self._batch_buffer_index >= batch_size:
-            model_inputs = self._batch_buffer[:batch_size]
-            max_probability = torch.max(torch.sigmoid(self.forward(model_inputs))).item()
-            self._batch_buffer_index = 0
-
-        return max_probability
