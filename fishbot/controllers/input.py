@@ -1,7 +1,7 @@
-from pynput.mouse import Controller as MouseController
-from pynput.mouse import Button as MouseButtons
 from pynput.keyboard import Controller as KeyboardController
 from pynput.keyboard import Key as KeyboardKeys
+from pynput.mouse import Button as MouseButtons
+from pynput.mouse import Controller as MouseController
 
 
 class InputController:
@@ -50,7 +50,7 @@ class InputController:
 
         Returns: None
         """
-        function_key = getattr(KeyboardKeys, f'f{num}')
+        function_key = getattr(KeyboardKeys, f"f{num}")
         self._keyboard_controller.tap_key(function_key)
 
     def tap_key(self, button: str) -> None:

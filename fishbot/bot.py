@@ -1,9 +1,10 @@
 import time
 from pathlib import Path
 
-from fishbot.constants import (LOOT_OFFSET_PIXELS, LOOTING_GAP_TIME,
-                               MAX_BOBBER_LIFETIME_SEC, MAX_LOOT_ITEMS,
-                               SLEEP_NOT_ACTIVE_SECONDS, MAX_START_WAIT_TIME, FISHING_WAIT_TIME)
+from fishbot.constants import (FISHING_WAIT_TIME, LOOT_OFFSET_PIXELS,
+                               LOOTING_GAP_TIME, MAX_BOBBER_LIFETIME_SEC,
+                               MAX_LOOT_ITEMS, MAX_START_WAIT_TIME,
+                               SLEEP_NOT_ACTIVE_SECONDS)
 from fishbot.controllers.input import InputController
 from fishbot.controllers.output import OutputController
 from fishbot.controllers.window import WindowController
