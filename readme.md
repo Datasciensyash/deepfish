@@ -35,6 +35,12 @@ Start bot with following command:
 run_deepfish_bot -k FISHING_KEY
 ```
 
+And if you don't want to see logs, add `--suppress_logging` flag:
+
+```commandline
+run_deepfish_bot -k FISHING_KEY --supress_logging
+```
+
 Where `FISHING_KEY` is key assigned to a fishing skill, e.g. `0`.
 
 ### Authors
