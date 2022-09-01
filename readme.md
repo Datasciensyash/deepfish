@@ -1,6 +1,7 @@
 ## DeepFish
 World of Warcraft fishing bot powered by Computer Vision and Deep Learning.
 
+![DeepFish logo](images/logo.png)
 
 ### Key features
 Plaforms: Windows (tested on Win10), probably MacOS (not tested).
