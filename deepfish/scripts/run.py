@@ -1,5 +1,4 @@
 import argparse
-from pathlib import Path
 
 from deepfish.bot import FishingBot
 
@@ -15,13 +14,21 @@ def parse_args() -> argparse.Namespace:
         type=str,
         required=True,
     )
+    arguments_parser.add_argument(
+        "--suppress_logging",
+        help="Pass this argument to suppress logs.",
+        action='store_true'
+    )
     args = arguments_parser.parse_args()
     return args
 
 
 def main():
     args = parse_args()
-    bot_instance = FishingBot(fishing_skill_key=args.fishing_skill_key)
+    bot_instance = FishingBot(
+        fishing_skill_key=args.fishing_skill_key,
+        need_logging=not args.suppress_logging
+    )
     bot_instance.run()
 
 
