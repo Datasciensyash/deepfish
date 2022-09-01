@@ -9,4 +9,4 @@ scipy==1.9.0
 segmentation_models_pytorch==0.3.0
 timm==0.4.12
 torch==1.12.1
-win32gui==221.6
+pywin32
