@@ -3,6 +3,7 @@ World of Warcraft fishing bot powered by Computer Vision and Deep Learning.
 
 ![DeepFish logo](images/logo.png)
 
+Note: Usage of this bot is abuse of World of Warcraft terms of service. Please, don't use it to abuse fishing.
 
 ## Showcase 
 All actions on this video are being performed by deepfish bot.
