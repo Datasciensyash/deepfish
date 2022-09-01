@@ -39,5 +39,6 @@ Where `FISHING_KEY` is key assigned to a fishing skill, e.g. `0`.
 
 ### Authors
 
-Bot & Model training - @Datasciensyash
-Dataset gathering & Model training - @LisenKapusta
+Bot & Model training - Datasciensyash
+
+Dataset gathering & Model training - LisenKapusta
