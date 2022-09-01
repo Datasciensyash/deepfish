@@ -1,10 +1,13 @@
 import time
 from pathlib import Path
 
-from deepfish.constants import (FISHING_WAIT_TIME, LOOT_OFFSET_PIXELS,
+from deepfish import CHECKPOINTS_DIR
+from deepfish.constants import (BOBBER_DETECTOR_CHECKPOINT_NAME,
+                                FISHING_WAIT_TIME, LOOT_OFFSET_PIXELS,
                                 LOOTING_GAP_TIME, MAX_BOBBER_LIFETIME_SEC,
                                 MAX_LOOT_ITEMS, MAX_START_WAIT_TIME,
-                                SLEEP_NOT_ACTIVE_SECONDS)
+                                SLEEP_NOT_ACTIVE_SECONDS,
+                                SPLASH_DETECTOR_CHECKPOINT_NAME)
 from deepfish.controllers.input import InputController
 from deepfish.controllers.output import OutputController
 from deepfish.controllers.window import WindowController
@@ -18,8 +21,6 @@ class FishingBot:
     def __init__(
         self,
         fishing_skill_key: str,
-        bobber_checkpoint: Path,
-        splash_checkpoint: Path,
         splash_threshold: float = 0.5,
     ):
         self._fishing_skill_key = fishing_skill_key
@@ -30,12 +31,14 @@ class FishingBot:
         self._window_controller = WindowController()
 
         self._bobber_detector = BobberDetector.from_checkpoint(
-            checkpoint_path=bobber_checkpoint,
+            checkpoint_path=CHECKPOINTS_DIR / BOBBER_DETECTOR_CHECKPOINT_NAME,
             mask=create_detection_mask(
                 self._screen_controller.height, self._screen_controller.width
             ),
         )
-        self._splash_classifier = ClassificationNet.from_checkpoint(splash_checkpoint)
+        self._splash_classifier = ClassificationNet.from_checkpoint(
+            CHECKPOINTS_DIR / SPLASH_DETECTOR_CHECKPOINT_NAME
+        )
         self._loot_matching = TemplateMatchingModel(self._template_directory / "loot_skull.png")
 
     @property

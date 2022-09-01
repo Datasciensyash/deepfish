@@ -15,32 +15,15 @@ def parse_args() -> argparse.Namespace:
         type=str,
         required=True,
     )
-    arguments_parser.add_argument(
-        "-bc",
-        "--bobber_checkpoint",
-        help="Path of checkpoint of Bobber Detector",
-        type=Path,
-        required=True,
-    )
-    arguments_parser.add_argument(
-        "-sc",
-        "--splash_checkpoint",
-        help="Path of checkpoint of Splash Detector",
-        type=Path,
-        required=True,
-    )
     args = arguments_parser.parse_args()
     return args
 
 
 def main():
     args = parse_args()
-    bot_instance = FishingBot(**vars(args))
+    bot_instance = FishingBot(fishing_skill_key=args.fishing_skill_key)
     bot_instance.run()
 
 
 if __name__ == "__main__":
-    import time
-
-    time.sleep(2)
     main()
