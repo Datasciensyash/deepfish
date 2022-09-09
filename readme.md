@@ -15,7 +15,7 @@ https://user-images.githubusercontent.com/60406311/187909093-f8aec3ec-73fa-4341-
 1. Platforms: Windows (tested on Windows 10)
 2. Runs on CPU.
 3. No memory modification (it's sneaky to anti-cheats!)
-4. Well-tested and should work on 3.3.5a (and lower).
+4. Well-tested and should work both on Classic and Retail version.
 
 
 ### Installation
