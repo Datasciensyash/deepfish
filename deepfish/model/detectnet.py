@@ -24,7 +24,8 @@ class BobberDetector(VisionModel):
         self._encoder_name = encoder_name
         self._mask = None
 
-        self._mask = A.Resize(*size)(image=mask)["image"]
+        if mask is not None:
+            self._mask = A.Resize(*size)(image=mask)["image"]
 
         self._size = size
         self._model = smp.Unet(
