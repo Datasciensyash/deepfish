@@ -167,6 +167,9 @@ class FishingBot:
                 # Wait for some time for loot to show up
                 time.sleep(0.5)
 
+                # Move mouse out of the screen
+                self._input_controller.move(0, 0)
+
                 # Make screenshot to find looting skull icon
                 self._logger.info(f"Making screenshot to detect looting skull icon...")
                 screenshot = self._screen_controller.get_screenshot()
